@@ -104,6 +104,21 @@ describe('Stats', () => {
     });
   });
 
+  describe('concurrent operations', () => {
+    it('should correctly count all increments when called concurrently', async () => {
+      const initial = getStats().totalTasks;
+      await Promise.all([
+        incrementTaskCount(),
+        incrementTaskCount(),
+        incrementTaskCount(),
+        incrementTaskCount(),
+        incrementTaskCount(),
+      ]);
+      const final = getStats().totalTasks;
+      assert.strictEqual(final, initial + 5);
+    });
+  });
+
   describe('integration', () => {
     it('should handle increment and decrement together', async () => {
       const initial = getStats().totalTasks;
