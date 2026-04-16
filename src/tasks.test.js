@@ -81,7 +81,14 @@ describe('Tasks', () => {
       });
 
       assert.ok(result);
-      assert.ok(result.success || result.data);
+      assert.ok(result.id);
+    });
+
+    it('should return the task directly with id at the top level', async () => {
+      const result = await createTask({ title: 'Direct Task', assigneeId: 1 });
+      assert.ok(result.id, 'task should have id at top level, not nested under .data');
+      assert.ok(result.title, 'task should have title at top level');
+      assert.strictEqual(result.title, 'Direct Task');
     });
 
     it('should create a task and increment stats', async () => {

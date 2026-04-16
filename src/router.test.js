@@ -112,6 +112,17 @@ describe('Router', () => {
     });
   });
 
+  describe('POST /api/tasks', () => {
+    it('should return 201 with the created task at the top level', async () => {
+      const req = mockRequest('POST', '/api/tasks', { title: 'New task', assigneeId: 1 });
+      const result = await router(req);
+
+      assert.strictEqual(result.status, 201);
+      assert.ok(result.body.id, 'response body should have id at top level, not nested under .data');
+      assert.strictEqual(result.body.title, 'New task');
+    });
+  });
+
   describe('GET /api/stats', () => {
     it('should return stats object', async () => {
       const req = mockRequest('GET', '/api/stats');
